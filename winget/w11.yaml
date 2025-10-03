@@ -1,0 +1,353 @@
+# yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
+properties:
+  resources:
+    # --- System Settings ---
+    - resource: Microsoft.Windows.Developer/DeveloperMode
+      directives:
+        description: Enable Windows Developer Mode
+        allowPrerelease: true
+      settings:
+        Ensure: Present
+
+    - resource: Microsoft.Windows.Developer/EnableRemoteDesktop
+      id: EnableRemoteDesktopSetting
+      directives:
+        description: Enable Remote Desktop
+        allowPrerelease: true
+        securityContext: elevated
+      settings:
+        Ensure: Present
+
+    - resource: Microsoft.Windows.Developer/FirewallRule
+      dependsOn:
+        - EnableRemoteDesktopSetting
+      directives:
+        description: Allow inbound RDP TCP 3389
+        allowPrerelease: true
+        securityContext: elevated
+      settings:
+        Name: RDP-TCP
+        DisplayName: Allow RDP TCP 3389
+        Action: Allow
+        Direction: Inbound
+        Enabled: true
+        Protocol: TCP
+        LocalPort:
+          - '3389'
+        Profiles:
+          - Private
+          - Public
+        Ensure: Present
+
+    - resource: Microsoft.Windows.Developer/FirewallRule
+      dependsOn:
+        - EnableRemoteDesktopSetting
+      directives:
+        description: Allow inbound RDP UDP 3389
+        allowPrerelease: true
+        securityContext: elevated
+      settings:
+        Name: RDP-UDP
+        DisplayName: Allow RDP UDP 3389
+        Action: Allow
+        Direction: Inbound
+        Enabled: true
+        Protocol: UDP
+        LocalPort:
+          - '3389'
+        Profiles:
+          - Private
+          - Public
+        Ensure: Present
+
+    - resource: PSDscResources/Registry
+      dependsOn:
+        - EnableRemoteDesktopSetting
+      directives:
+        description: Disable NLA requirement for RDP
+        securityContext: elevated
+      settings:
+        Key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp
+        ValueName: UserAuthentication
+        ValueType: Dword
+        ValueData: 0
+        Force: true
+
+    # --- WSL Installation ---
+    - resource: PSDscResources/Script
+      id: WslOptionalFeatures
+      directives:
+        description: Enable WSL optional features with DISM
+        securityContext: elevated
+      settings:
+        GetScript: |
+          return @{ Result = "CheckWslFeatures" }
+        TestScript: |
+          $vmp = (dism.exe /online /Get-FeatureInfo /FeatureName:VirtualMachinePlatform | Out-String)
+          $wsl = (dism.exe /online /Get-FeatureInfo /FeatureName:Microsoft-Windows-Subsystem-Linux | Out-String)
+          $vmpEnabled = $vmp -match 'State\\s*:\\s*Enabled'
+          $wslEnabled = $wsl -match 'State\\s*:\\s*Enabled'
+          return ($vmpEnabled -and $wslEnabled)
+        SetScript: |
+          dism.exe /online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart
+          dism.exe /online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /All /NoRestart
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: WslPackage
+      dependsOn:
+        - WslOptionalFeatures
+      directives:
+        description: Install WSL package
+      settings:
+        id: Microsoft.WSL
+        source: winget
+
+    - resource: PSDscResources/Script
+      dependsOn:
+        - WslPackage
+      directives:
+        description: Set WSL default version to 2
+        securityContext: elevated
+      settings:
+        GetScript: |
+          return @{ Result = "CheckWslDefaultVersion" }
+        TestScript: |
+          try {
+            $status = (wsl --status | Out-String)
+            return ($status -match 'Default Version:\s*2' -or $status -match 'Wersja domyślna:\s*2')
+          } catch {
+            return $false
+          }
+        SetScript: |
+          wsl --set-default-version 2
+
+    - resource: PSDscResources/Script
+      dependsOn:
+        - WslPackage
+      directives:
+        description: Install Ubuntu 24.04 on WSL
+        securityContext: elevated
+      settings:
+        GetScript: |
+          return @{ Result = "CheckUbuntu2404Wsl" }
+        TestScript: |
+          try {
+            $list = (wsl --list --quiet | Out-String)
+            return ($list -match 'Ubuntu-24\.04')
+          } catch {
+            return $false
+          }
+        SetScript: |
+          wsl --install -d Ubuntu-24.04 --no-launch
+
+    # --- Software Installation ---
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: TeamsPackage
+      directives:
+        description: Install Microsoft Teams
+      settings:
+        id: Microsoft.Teams
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Windows Terminal
+      settings:
+        id: Microsoft.WindowsTerminal
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Microsoft PowerToys
+      settings:
+        id: Microsoft.PowerToys
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install 7-Zip
+      settings:
+        id: 7zip.7zip
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: FirefoxPackage
+      directives:
+        description: Install Mozilla Firefox
+      settings:
+        id: Mozilla.Firefox
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Obsidian
+      settings:
+        id: Obsidian.Obsidian
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: VSCodePackage
+      directives:
+        description: Install Visual Studio Code
+      settings:
+        id: Microsoft.VisualStudioCode
+        source: winget
+
+    - resource: Microsoft.VSCode.Dsc/VSCodeExtension
+      dependsOn:
+        - VSCodePackage
+      directives:
+        description: Install VS Code extension - Remote WSL
+        allowPrerelease: true
+      settings:
+        Name: ms-vscode-remote.remote-wsl
+
+    - resource: Microsoft.VSCode.Dsc/VSCodeExtension
+      dependsOn:
+        - VSCodePackage
+      directives:
+        description: Install VS Code extension - ChatGPT
+        allowPrerelease: true
+      settings:
+        Name: openai.chatgpt
+
+    - resource: Microsoft.VSCode.Dsc/VSCodeExtension
+      dependsOn:
+        - VSCodePackage
+      directives:
+        description: Install VS Code extension - OpenTofu
+        allowPrerelease: true
+      settings:
+        Name: opentofu.vscode-opentofu
+
+    - resource: Microsoft.VSCode.Dsc/VSCodeExtension
+      dependsOn:
+        - VSCodePackage
+      directives:
+        description: Install VS Code extension - markdownlint
+        allowPrerelease: true
+      settings:
+        Name: davidanson.vscode-markdownlint
+
+    - resource: Microsoft.VSCode.Dsc/VSCodeExtension
+      dependsOn:
+        - VSCodePackage
+      directives:
+        description: Install VS Code extension - GitLens
+        allowPrerelease: true
+      settings:
+        Name: eamodio.gitlens
+
+    # --- Explorer & UI Customization ---
+    - resource: Microsoft.Windows.Developer/WindowsExplorer
+      directives:
+        description: Configure Windows Explorer options
+        allowPrerelease: true
+        securityContext: current
+      settings:
+        FileExtensions: Show
+        HiddenFiles: Show
+        RestartExplorer: true
+
+    - resource: Microsoft.Windows.Developer/ShowSecondsInClock
+      directives:
+        description: Show seconds in the system tray clock
+        allowPrerelease: true
+      settings:
+        Ensure: Present
+
+    # --- Taskbar Customization ---
+    - resource: Microsoft.Windows.Developer/Taskbar
+      id: TaskbarSettings
+      directives:
+        description: Configure taskbar settings
+        allowPrerelease: true
+      settings:
+        Alignment: Middle
+        SearchBoxMode: Hide
+        TaskViewButton: Hide
+        WidgetsButton: Hide
+        RestartExplorer: true
+
+    # --- Power Plan Settings ---
+    - resource: Microsoft.Windows.Developer/PowerPlanSetting
+      directives:
+        description: Configure Screen Timeout (Battery)
+        allowPrerelease: true
+      settings:
+        Name: DisplayTimeout
+        PowerSource: Battery
+        SettingValue: 300
+
+    - resource: Microsoft.Windows.Developer/PowerPlanSetting
+      directives:
+        description: Configure Screen Timeout (AC)
+        allowPrerelease: true
+      settings:
+        Name: DisplayTimeout
+        PowerSource: PluggedIn
+        SettingValue: 3600
+
+    - resource: Microsoft.Windows.Developer/PowerPlanSetting
+      directives:
+        description: Configure Sleep Timeout (Battery)
+        allowPrerelease: true
+      settings:
+        Name: SleepTimeout
+        PowerSource: Battery
+        SettingValue: 900
+
+    - resource: Microsoft.Windows.Developer/PowerPlanSetting
+      directives:
+        description: Configure Sleep Timeout (AC)
+        allowPrerelease: true
+      settings:
+        Name: SleepTimeout
+        PowerSource: PluggedIn
+        SettingValue: 0
+
+    # --- Appearance (Dark Mode) ---
+    - resource: Microsoft.Windows.Developer/EnableDarkMode
+      directives:
+        description: Enable Dark Mode
+        allowPrerelease: true
+      settings:
+        Ensure: Present
+        RestartExplorer: true
+
+    # --- Security ---
+    # NOTE: This controls UAC prompt behavior (ConsentPromptBehaviorAdmin).
+    # It is the supported knob in Microsoft.Windows.Developer.
+    - resource: Microsoft.Windows.Developer/UserAccessControl
+      directives:
+        description: Minimize UAC prompts
+        allowPrerelease: true
+      settings:
+        AdminConsentPromptBehavior: NoCredOrConsentRequired
+
+    - resource: PSDscResources/Script
+      directives:
+        description: Disable UAC prompts completely (EnableLUA=0, restart required)
+        securityContext: elevated
+      settings:
+        GetScript: |
+          return @{ Result = "CheckEnableLUA" }
+        TestScript: |
+          try {
+            $v = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' -Name 'EnableLUA' -ErrorAction Stop).EnableLUA
+            return ($v -eq 0)
+          } catch {
+            return $false
+          }
+        SetScript: |
+          Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' -Name 'EnableLUA' -Type DWord -Value 0
+          Write-Host 'EnableLUA ustawione na 0. Wymagany restart systemu.'
+
+    # NOTE:
+    # `Microsoft.Windows.Developer` does not expose `WindowsFeature`/`Registry` resources.
+    # If you still need to enable:
+    # - VirtualMachinePlatform
+    # - Microsoft-Windows-Subsystem-Linux
+    # add a dedicated Optional Feature step outside this file.
+
+  configurationVersion: 0.2.0
