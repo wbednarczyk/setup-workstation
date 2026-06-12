@@ -28,8 +28,8 @@ if [[ ! -f "$BASHRC" ]]; then
 fi
 
 # 3) Ensure include block in .bashrc (one-time)
-INCLUDE_START="# >>> include ~/.bashrc.d/*.sh (setup-env) >>>"
-INCLUDE_END="# <<< include ~/.bashrc.d/*.sh (setup-env) <<<"
+INCLUDE_START="# >>> include ~/.bashrc.d/*.sh (setup-workstation) >>>"
+INCLUDE_END="# <<< include ~/.bashrc.d/*.sh (setup-workstation) <<<"
 
 if ! grep -qF "$INCLUDE_START" "$BASHRC"; then
   ts=$(date +%Y%m%d-%H%M%S)
@@ -39,14 +39,14 @@ if ! grep -qF "$INCLUDE_START" "$BASHRC"; then
 
   cat >>"$BASHRC" <<'EOF'
 
-# >>> include ~/.bashrc.d/*.sh (setup-env) >>>
+# >>> include ~/.bashrc.d/*.sh (setup-workstation) >>>
 # Load per-user shell drop-ins, if any.
 if [ -d "$HOME/.bashrc.d" ]; then
   for f in "$HOME/.bashrc.d"/*.sh; do
     [ -r "$f" ] && . "$f"
   done
 fi
-# <<< include ~/.bashrc.d/*.sh (setup-env) <<<
+# <<< include ~/.bashrc.d/*.sh (setup-workstation) <<<
 EOF
   chown "$TARGET_USER:$TARGET_USER" "$BASHRC"
   log "Include block appended to $BASHRC"

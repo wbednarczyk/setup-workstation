@@ -16,7 +16,8 @@ Keep changes small, script-first, and consistent with the existing numbered setu
 - `scripts/ubuntu/install/` contains Ubuntu/WSL package and tool installers.
 - `scripts/ubuntu/setup/` contains user environment configuration scripts.
 - `winget/` contains Windows 11 WinGet DSC configuration.
-- `README.md` is intentionally minimal.
+- `README.md` describes the repository, layout, usage, validation, and license.
+- `MAINTAINERS.md` lists repository maintainers.
 - `LICENSE` is MIT.
 
 ## Execution Model

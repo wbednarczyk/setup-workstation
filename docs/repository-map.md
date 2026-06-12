@@ -5,7 +5,8 @@ and an Ubuntu WSL environment.
 
 ## Root
 
-- `README.md`: Minimal repository title.
+- `README.md`: Repository overview, usage, validation, and license.
+- `MAINTAINERS.md`: Repository maintainers.
 - `LICENSE`: MIT license.
 - `AGENTS.md`: Contributor and agent instructions for this repository.
 
