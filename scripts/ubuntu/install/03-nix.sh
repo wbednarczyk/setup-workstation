@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 13-install-nix.sh
+# 03-nix.sh
 # Installs Nix using the official installer. Safe to re-run.
 
 set -euo pipefail

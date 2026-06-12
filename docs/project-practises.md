@@ -6,8 +6,8 @@ clear, repeatable automation over broad abstractions.
 ## Scope
 
 - Keep the project focused on workstation setup.
-- Put Ubuntu/WSL installers in `install-scripts/`.
-- Put user environment and dotfile setup in `setup-scripts/`.
+- Put Ubuntu/WSL installers in `scripts/ubuntu/install/`.
+- Put user environment and dotfile setup in `scripts/ubuntu/setup/`.
 - Put Windows host setup in `winget/`.
 - Put repository guidance and explanations in `docs/`.
 - Avoid adding framework or build tooling unless it solves a concrete
@@ -19,6 +19,8 @@ clear, repeatable automation over broad abstractions.
 - Extend an existing script only when the change is part of that script's
   current responsibility.
 - Preserve the numeric flow so a user can run scripts in order.
+- Use dense two-digit numbering from `00`, incrementing by one in each script
+  directory.
 - Make scripts safe to rerun.
 - State prerequisites in comments or docs when a script depends on another
   script.

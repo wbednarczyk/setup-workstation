@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 01_sudo_nopasswd.sh
+# 00-sudo-passwordless.sh
 # Creates /etc/sudoers.d/99-<user>-nopasswd for passwordless sudo.
 
 set -euo pipefail

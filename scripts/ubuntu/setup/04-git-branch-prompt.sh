@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 05.01-git-branch-in-prompt.sh
+# 04-git-branch-prompt.sh
 # Generates ~/.bashrc.d/50-git-branch.sh with exports + git branch prompt.
 # Idempotent overwrite. No early 'return'; safe for non-interactive shells.
 

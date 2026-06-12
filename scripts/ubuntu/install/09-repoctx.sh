@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 19-install-repoctx.sh
+# 09-repoctx.sh
 # Installs the latest repoctx release into /usr/local/bin for x64 Linux. Safe to re-run.
 
 set -euo pipefail

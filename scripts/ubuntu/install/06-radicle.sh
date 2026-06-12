@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 16-install-radicle.sh
+# 06-radicle.sh
 # Installs the Radicle toolchain from Radicle's official apt repository. Safe to re-run.
 
 set -euo pipefail

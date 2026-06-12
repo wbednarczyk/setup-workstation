@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 14-setup-nix-direnv-dropin.sh
+# 07-nix-direnv.sh
 # Enables direnv in Bash and configures Nix for `nix develop`.
 
 set -euo pipefail

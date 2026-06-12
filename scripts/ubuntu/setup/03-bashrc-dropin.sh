@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 05_setup_bashrc_d.sh
+# 03-bashrc-dropin.sh
 # Creates ~/.bashrc.d and ensures ~/.bashrc sources ~/.bashrc.d/*.sh (idempotent).
 
 set -euo pipefail

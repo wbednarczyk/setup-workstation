@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 18-install-git-cliff.sh
+# 08-git-cliff.sh
 # Installs the latest git-cliff release into /usr/local/bin for x64 Linux. Safe to re-run.
 
 set -euo pipefail

@@ -8,12 +8,13 @@ Keep changes small, script-first, and consistent with the existing numbered setu
 - [Repository map](docs/repository-map.md)
 - [Script conventions](docs/script-conventions.md)
 - [Project practises](docs/project-practises.md)
+- [Bash script layout](docs/bash-scripts.md)
 - [Windows WinGet configuration](docs/windows-winget.md)
 
 ## Project Shape
 
-- `install-scripts/` contains Ubuntu/WSL package and tool installers.
-- `setup-scripts/` contains user environment configuration scripts.
+- `scripts/ubuntu/install/` contains Ubuntu/WSL package and tool installers.
+- `scripts/ubuntu/setup/` contains user environment configuration scripts.
 - `winget/` contains Windows 11 WinGet DSC configuration.
 - `README.md` is intentionally minimal.
 - `LICENSE` is MIT.
@@ -23,6 +24,8 @@ Keep changes small, script-first, and consistent with the existing numbered setu
 - Scripts are numbered to imply ordering.
 - Installers generally run before setup scripts.
 - Prefer adding a new numbered script over embedding unrelated behavior in an existing script.
+- Use dense two-digit numbering from `00`, incrementing by one within each
+  script directory.
 - Preserve idempotency: scripts should be safe to run repeatedly.
 - Prefer explicit final verification when installing binaries or changing privileged state.
 
@@ -75,7 +78,7 @@ Keep changes small, script-first, and consistent with the existing numbered setu
 ## User Environment Setup
 
 - `~/.bashrc.d` is the preferred extension point.
-- `setup-scripts/10-setup-bashrc.d-dropin.sh` ensures `~/.bashrc` sources `~/.bashrc.d/*.sh`.
+- `scripts/ubuntu/setup/03-bashrc-dropin.sh` ensures `~/.bashrc` sources `~/.bashrc.d/*.sh`.
 - Drop-ins should guard interactive-only behavior with:
 
   ```bash

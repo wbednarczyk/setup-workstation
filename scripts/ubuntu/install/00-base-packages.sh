@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 10_install_base_packages.sh
+# 00-base-packages.sh
 # Install base packages on Ubuntu (incl. bash-completion). Safe to re-run.
 
 set -euo pipefail

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 11_editor_vim.sh
+# 05-editor.sh
 # Creates ~/.bashrc.d/00-editor.sh to set vim as default editor.
 
 set -euo pipefail

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 15-install-gh-cli.sh
+# 05-gh-cli.sh
 # Installs GitHub CLI from GitHub's official apt repository. Safe to re-run.
 
 set -euo pipefail

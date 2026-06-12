@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 14-install-kind.sh
+# 04-kind.sh
 # Installs the latest kind release into /usr/local/bin for x64 Linux. Safe to re-run.
 
 set -euo pipefail

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 13-setup-starship-dropin.sh
+# 06-starship.sh
 # Enables Starship prompt in Bash via ~/.bashrc.d and writes minimal config.
 # Safe for WSL / Ubuntu setups.
 

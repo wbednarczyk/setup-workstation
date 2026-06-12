@@ -1,16 +1,16 @@
 # Script Conventions
 
-These conventions were inferred from every script in `install-scripts/` and
-`setup-scripts/`.
+These conventions were inferred from every script in `scripts/ubuntu/install/`
+and `scripts/ubuntu/setup/`.
 
 ## File Naming
 
 - Scripts are numbered with two-digit prefixes.
 - Names use kebab case in the filesystem.
-- Some internal header comments retain older underscore names; avoid relying on
-  header comments as canonical names.
 - New related scripts should use the next available numeric prefix in the
   appropriate directory.
+- Use dense numbering starting at `00` and incrementing by one.
+- Renumber only during an intentional organization pass.
 
 ## Bash Baseline
 
@@ -126,15 +126,16 @@ Git setup is intentionally non-destructive:
 - Set `core.editor` only if absent.
 - Add multi-value `insteadOf` entries only if the value is not already present.
 - Do not manage `user.name` or `user.email`.
-- Global excludes are intentionally managed by `03-gitignore-global.sh`.
+- Global excludes are intentionally managed by
+  `scripts/ubuntu/setup/02-gitignore-global.sh`.
 
 ## Validation Commands
 
 For shell scripts:
 
 ```bash
-bash -n install-scripts/name.sh
-bash -n setup-scripts/name.sh
+bash -n scripts/ubuntu/install/name.sh
+bash -n scripts/ubuntu/setup/name.sh
 ```
 
 For the Windows configuration:

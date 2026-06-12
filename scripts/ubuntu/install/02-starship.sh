@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 12-install-starship.sh
+# 02-starship.sh
 # Installs Starship prompt into /usr/local/bin (idempotent). Works on Ubuntu (incl. WSL).
 
 set -euo pipefail

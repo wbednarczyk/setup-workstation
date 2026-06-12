@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 03_git_ignore.sh
+# 02-gitignore-global.sh
 # Installs a predefined ~/.gitignore_global and configures git to use it.
 
 set -euo pipefail

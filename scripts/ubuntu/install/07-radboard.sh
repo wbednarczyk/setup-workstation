@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 17-install-radboard.sh
+# 07-radboard.sh
 # Installs Radboard for Radicle from the official Debian package. Safe to re-run.
 
 set -euo pipefail
@@ -13,7 +13,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-RADICLE_INSTALLER="$SCRIPT_DIR/16-install-radicle.sh"
+RADICLE_INSTALLER="$SCRIPT_DIR/06-radicle.sh"
 RADBOARD_DEB_URL="https://dl.mikolajczyk.org/radboard/latest/radboard-amd64.deb"
 RADBOARD_VERSION_URL="https://dl.mikolajczyk.org/radboard/version"
 ARCH="$(dpkg --print-architecture)"

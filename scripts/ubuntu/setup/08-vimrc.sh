@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 12_vimrc.sh
+# 08-vimrc.sh
 # Installs a minimal but useful ~/.vimrc for the current user (idempotent overwrite).
 
 set -euo pipefail

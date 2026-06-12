@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 02_git_config_merge.sh
+# 01-git-config.sh
 # Append-only git config: ensure aliases, editor (if unset), and GitHub SSH insteadOf.
 # Does NOT overwrite user.name / user.email or existing differing values.
 
