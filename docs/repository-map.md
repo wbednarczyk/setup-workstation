@@ -45,6 +45,9 @@ Primary automation lives under `scripts/`.
 - `09-repoctx.sh`: Installs the latest x64 Linux repoctx binary into
   `/usr/local/bin`, verifies the release checksum, and verifies the `repoctx`
   command.
+- `10-node.sh`: Installs nvm + Node.js 22 (LTS) for the current user, sets it
+  as the default, and writes a `~/.bashrc.d/15-nvm.sh` drop-in. Runs as the
+  normal user (not root); shadows any transitive distro `nodejs` on PATH.
 
 ## `scripts/ubuntu/setup/`
 
