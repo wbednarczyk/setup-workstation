@@ -48,6 +48,9 @@ Primary automation lives under `scripts/`.
 - `10-node.sh`: Installs nvm + Node.js 22 (LTS) for the current user, sets it
   as the default, and writes a `~/.bashrc.d/15-nvm.sh` drop-in. Runs as the
   normal user (not root); shadows any transitive distro `nodejs` on PATH.
+- `11-rtk.sh`: Installs the latest Linux rtk (Rust Token Killer) binary into
+  `/usr/local/bin`, verifies the release checksum, and verifies the `rtk`
+  command.
 
 ## `scripts/ubuntu/setup/`
 

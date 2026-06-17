@@ -23,7 +23,7 @@ PKGS=(
   build-essential make pkg-config
 
   # shell & UX
-  bash-completion htop tmux tree less vim
+  bash-completion htop tmux tree less vim mc
 
   # archives
   unzip zip tar xz-utils
