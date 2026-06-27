@@ -29,7 +29,7 @@ PKGS=(
   unzip zip tar xz-utils
 
   # CLI helpers
-  jq yq fzf ripgrep
+  jq yq fzf ripgrep ncdu
 
   # env helpers
   direnv

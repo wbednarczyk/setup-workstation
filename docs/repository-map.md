@@ -22,7 +22,7 @@ Primary automation lives under `scripts/`.
 
 - `00-base-packages.sh`: Installs common Ubuntu packages:
   certificates, curl/wget, build tools, shell utilities, archive tools, `jq`,
-  `yq`, `fzf`, `ripgrep`, `direnv`, and network tools.
+  `yq`, `fzf`, `ripgrep`, `ncdu`, `direnv`, and network tools.
 - `01-docker-wsl.sh`: Installs Docker Engine inside Ubuntu on WSL 2,
   enables systemd if required, configures Docker's apt repository, installs a
   selected Docker major version when available, starts Docker, and adds the
